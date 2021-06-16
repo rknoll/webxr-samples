@@ -32,7 +32,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     <title>Hit Test</title>
   </head>
   <body>
-    <header>
+    <header id="overlay">
       <details open>
         <summary>Hit Test</summary>
         <p>
@@ -105,7 +105,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }
 
       function onRequestSession() {
-        return navigator.xr.requestSession('immersive-ar', {requiredFeatures: ['local', 'hit-test']})
+        return navigator.xr.requestSession('immersive-ar', {
+          optionalFeatures: ['dom-overlay'],
+                domOverlay: {root: document.getElementById('overlay')},
+          requiredFeatures: ['local', 'hit-test']})
                            .then((session) => {
           xrButton.setSession(session);
           onSessionStarted(session);
