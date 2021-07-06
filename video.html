@@ -85,11 +85,11 @@ async function initPlayer() {
   player.configure({
   drm: {
     servers: {
-      'com.widevine.alpha': 'https://foo.bar/drm/widevine'
+      'com.widevine.alpha': 'https://proxy.staging.widevine.com/proxy?provider=widevine_test'
     },
     advanced: {
       'com.widevine.alpha': {
-        'videoRobustness': 'SW_SECURE_DECODE'
+        'videoRobustness': 'HW_SECURE_ALL'
       }
     }
   }
