@@ -142,7 +142,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         let pose = frame.getViewerPose(xrRefSpace);
 
         if (pose) {
-          gl.bindFramebuffer(gl.FRAMEBUFFER, session.renderState.baseLayer.framebuffer);
+          const glLayer = session.renderState.baseLayer;
+          gl.bindFramebuffer(gl.FRAMEBUFFER, glLayer.framebuffer);
+          
+          console.log('Viewports:');
+          for (let view of pose.views) {
+            let viewport = glLayer.getViewport(view);
+            console.log(`    ${viewport.x}, ${viewport.y}, ${viewport.width}, ${viewport.height}`);
+          }
 
           // Update the clear color so that we can observe the color in the
           // headset changing over time. Use a scissor rectangle to keep the AR
