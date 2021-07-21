@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   </head>
   <body>
     <div id="overlay">
-      <header>
+      <header id="header">
         <details open>
           <summary>Barebones WebXR DOM Overlay</summary>
           <p>
@@ -118,6 +118,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           xrRefSpace = refSpace;
           session.requestAnimationFrame(onXRFrame);
         });
+        document.getElementById("header").style.display = 'none';
       }
 
       function onRequestSessionError(ex) {
@@ -134,6 +135,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         xrButton.innerHTML = 'Enter AR';
         document.getElementById('session-info').innerHTML = '';
         gl = null;
+        document.getElementById("header").style.display = 'block';
       }
 
       function onXRFrame(t, frame) {
@@ -147,7 +149,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           
           console.log('Viewports:');
           for (let view of pose.views) {
-            let viewport = glLayer.getViewport(view);
+            const viewport = glLayer.getViewport(view);
             console.log(`    ${viewport.x}, ${viewport.y}, ${viewport.width}, ${viewport.height}`);
             gl.enable(gl.SCISSOR_TEST);
             const time = Date.now();
@@ -166,11 +168,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
           // Update the clear color so that we can observe the color in the
           // headset changing over time. Use a scissor rectangle to keep the AR
-          // scene visible.
-          const width = session.renderState.baseLayer.framebufferWidth;
-          const height = session.renderState.baseLayer.framebufferHeight;
+          const viewport = glLayer.getViewport(pose.views[0]);
+          const width = viewport.width;
+          const height = viewport.height;
           gl.enable(gl.SCISSOR_TEST);
-          gl.scissor(width / 4, height / 4, width / 2, height / 2);
+          gl.scissor(width / 4 + viewport.x, height / 4 + viewport.y, width / 2, height / 2);
           let time = Date.now();
           gl.clearColor(Math.cos(time / 2000), Math.cos(time / 4000), Math.cos(time / 6000), 0.5);
           gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
